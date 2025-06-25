@@ -69,7 +69,7 @@ DEBUG=False
 ALLOWED_HOSTS=akanaman.pythonanywhere.com,localhost,127.0.0.1
 ```
 
-- **Never commit your `.env` or secret keys to GitHub!**
+
 
 ### 4. Apply Migrations & Create Superuser
 
@@ -133,19 +133,10 @@ rewire/
 
 ---
 
-## Security & Best Practices
-
-- Use environment variables for all secrets and sensitive settings.
-- Add `.env` and `db.sqlite3` to `.gitignore`.
-- Set `DEBUG = False` in production.
-- Use strong, unique passwords for admin and users.
-- Regularly update dependencies.
-
----
 
 ## Credits
 
-- [Django-Authentication-Admin-Access-Project](https://github.com/msoni6620/Django-Authentication-Admin-Access-Project) for project inspiration.
+
 - [Three.js Galaxy Background](https://github.com/mrdoob/three.js/) for the cosmic effect.
 
 ---

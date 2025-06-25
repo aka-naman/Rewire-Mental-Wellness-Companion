@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Rewire - Mental Wellness Tracker{% endblock %}
+
+{% block content %}
+<div class="row align-items-center">
+    <div class="col-md-6">
+        <div class="home-content">
+            <h1 class="display-4 mb-4">Welcome to Rewire</h1>
+            <h2 class="h3 mb-4">Your Mental Wellness Companion</h2>
+            <p class="lead mb-4">
+                Track your moods, journal your thoughts, and visualize your mental wellness journey with our simple yet powerful tools.
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 me-md-2">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="home-visual">
+            <!-- Removed visualization container, galaxy background is now global -->
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 pt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 feature-card">
+            <div class="card-body text-center">
+                <i class="fas fa-book fa-3x mb-3 text-primary"></i>
+                <h3 class="card-title h4">Journal</h3>
+                <p class="card-text">Record your thoughts, feelings, and experiences in a private, secure journal.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 feature-card">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-3x mb-3 text-primary"></i>
+                <h3 class="card-title h4">Track Moods</h3>
+                <p class="card-text">Monitor your emotional well-being with our intuitive mood tracking system.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 feature-card">
+            <div class="card-body text-center">
+                <i class="fas fa-cube fa-3x mb-3 text-primary"></i>
+                <h3 class="card-title h4">Visualize</h3>
+                <p class="card-text">See your mental wellness journey come to life with beautiful 3D visualizations.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/visualization.js"></script>
+<script>
+    // The visualization.js script is no longer needed for the home page background
+</script>
+{% endblock %}

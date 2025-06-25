@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+
+{% block title %}Mood Tracker - Rewire{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Track Your Mood</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">How are you feeling?</label>
+                        <div class="mood-options">
+                            {{ form.mood_type }}
+                            {% if form.mood_type.errors %}
+                                <div class="text-danger small mt-1">{{ form.mood_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.mood_level.id_for_label }}" class="form-label">Intensity (1-10)</label>
+                        {{ form.mood_level }}
+                        {% if form.mood_level.errors %}
+                            <div class="text-danger small mt-1">{{ form.mood_level.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.notes.id_for_label }}" class="form-label">Notes (Optional)</label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}
+                            <div class="text-danger small mt-1">{{ form.notes.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Save Mood</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Filter</h2>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="{% url 'mood' %}">
+                    <div class="mb-3">
+                        <label class="form-label">Date Range</label>
+                        <select name="period" class="form-select">
+                            <option value="week" {% if period == 'week' %}selected{% endif %}>Last 7 days</option>
+                            <option value="month" {% if period == 'month' %}selected{% endif %}>Last 30 days</option>
+                            <option value="year" {% if period == 'year' %}selected{% endif %}>Last 365 days</option>
+                            <option value="all" {% if period == 'all' %}selected{% endif %}>All time</option>
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-outline-primary">Apply Filter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Mood Visualization</h2>
+            </div>
+            <div class="card-body">
+                <div id="mood-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Mood History</h2>
+            </div>
+            <div class="card-body">
+                {% if moods %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Mood</th>
+                                    <th>Intensity</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mood in moods %}
+                                    <tr>
+                                        <td>{{ mood.date_created|date:"M d, Y" }}</td>
+                                        <td>{{ mood.get_mood_type_display }}</td>
+                                        <td>{{ mood.mood_level }}</td>
+                                        <td>{{ mood.notes|default:"-" }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <p>You haven't tracked any moods yet.</p>
+                        <p>Use the form on the left to log your first mood!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mood-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .mood-options input[type="radio"] {
+        display: none;
+    }
+    
+    .mood-options label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .mood-options input[type="radio"]:checked + label {
+        border-color: #0d6efd;
+        background-color: rgba(13, 110, 253, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Add form-control class to all form inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const formInputs = document.querySelectorAll('form input[type="number"], form textarea');
+        formInputs.forEach(input => {
+            input.classList.add('form-control');
+        });
+        
+        // Style the mood radio buttons
+        const moodRadios = document.querySelectorAll('input[name="mood_type"]');
+        moodRadios.forEach(radio => {
+            const label = document.querySelector(`label[for="${radio.id}"]`);
+            if (label) {
+                // Add emoji based on mood type
+                let emoji = '';
+                if (label.textContent.includes('Happy')) emoji = '😊';
+                else if (label.textContent.includes('Excited')) emoji = '🤩';
+                else if (label.textContent.includes('Grateful')) emoji = '🙏';
+                else if (label.textContent.includes('Relaxed')) emoji = '😌';
+                else if (label.textContent.includes('Content')) emoji = '🙂';
+                else if (label.textContent.includes('Tired')) emoji = '😴';
+                else if (label.textContent.includes('Bored')) emoji = '😒';
+                else if (label.textContent.includes('Sad')) emoji = '😢';
+                else if (label.textContent.includes('Anxious')) emoji = '😰';
+                else if (label.textContent.includes('Angry')) emoji = '😠';
+                
+                if (emoji) {
+                    label.innerHTML = `<span style="font-size: 24px;">${emoji}</span><span>${label.textContent}</span>`;
+                }
+            }
+        });
+        
+        // Create mood chart if data exists
+        if (document.getElementById('mood-chart') && typeof moodData !== 'undefined') {
+            const ctx = document.getElementById('mood-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: moodData.dates,
+                    datasets: [{
+                        label: 'Mood Intensity',
+                        data: moodData.levels,
+                        borderColor: '#0d6efd',
+                        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Intensity'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Date'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    // Sample mood data - this would be replaced by actual data from the backend
+    const moodData = {
+        dates: [{% for mood in moods %}"{{ mood.date_created|date:'M d' }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+        levels: [{% for mood in moods %}{{ mood.mood_level }}{% if not forloop.last %}, {% endif %}{% endfor %}]
+    };
+</script>
+{% endblock %}

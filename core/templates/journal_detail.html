@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Journal Entry - Rewire{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h4 mb-0">Edit Journal Entry</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.content.id_for_label }}" class="form-label">Content</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                            <div class="text-danger small mt-1">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'journal' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Journal
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Entry
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-muted">
+                <small>Created: {{ entry.date_created|date:"F j, Y, g:i a" }}</small>
+                <br>
+                <small>Last Modified: {{ entry.date_modified|date:"F j, Y, g:i a" }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add form-control class to all form inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const formInputs = document.querySelectorAll('form input, form textarea');
+        formInputs.forEach(input => {
+            input.classList.add('form-control');
+        });
+        
+        // Add rows to textarea
+        const textareas = document.querySelectorAll('form textarea');
+        textareas.forEach(textarea => {
+            textarea.setAttribute('rows', '10');
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,281 @@
+/* Main Styles for Rewire App */
+
+/* General Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #0b0b1f 0%, #0d0d24 100%);
+    color: #A5A5B5;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    color: #E5E5F7;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+}
+
+h2, h3 {
+    color: #B0B0CC;
+    font-weight: 400;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(0, 0, 0, 0.6) !important;
+    box-shadow: none;
+}
+
+.navbar-brand, .navbar-brand span {
+    color: #FFFFFF !important;
+}
+
+.navbar-nav .nav-link {
+    color: #9fb2ff !important;
+    transition: color 0.2s;
+}
+
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+    color: #FFFFFF !important;
+}
+
+/* Card Styles */
+.card, .feature-card {
+    background: rgba(255,255,255,0.05);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover, .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    font-weight: 600;
+    border-bottom: none;
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 5px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: #6C5DD3;
+    color: #FFFFFF;
+    border: none;
+    box-shadow: 0 0 10px rgba(108, 93, 211, 0.6);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+    background: #8571ec;
+    box-shadow: 0 0 15px rgba(108, 93, 211, 0.8);
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    color: #6C5DD3;
+    border: 1.5px solid #6C5DD3;
+    box-shadow: none;
+    transition: box-shadow 0.2s, color 0.2s;
+}
+
+.btn-outline-secondary:hover {
+    color: #FFFFFF;
+    box-shadow: 0 0 10px rgba(108, 93, 211, 0.6);
+    border-color: #8571ec;
+}
+
+/* Form Styles */
+.form-control {
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ced4da;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Home Page Styles */
+.hero-section {
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.hero-content h1 {
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #212529;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #495057;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 1.5rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 30px rgba(108, 93, 211, 0.15);
+}
+
+.feature-card i {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    color: #0d6efd;
+}
+
+.feature-card h3 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #D8D8F0;
+}
+
+.feature-card .card-text {
+    color: #A5A5B5;
+}
+
+/* Profile Page Styles */
+.avatar-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+}
+
+/* Journal Page Styles */
+.journal-entry {
+    transition: all 0.3s;
+}
+
+.journal-entry:hover {
+    background-color: #f8f9fa;
+}
+
+/* Mood Tracker Styles */
+.mood-options label {
+    width: 100px;
+    text-align: center;
+}
+
+/* Dashboard Styles */
+.progress {
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: #0d6efd;
+    color: white;
+    font-weight: 600;
+}
+
+/* Footer Styles */
+footer {
+    background: #11111a;
+    color: #888888;
+}
+
+footer a {
+    color: #6C5DD3;
+    transition: color 0.2s;
+}
+
+footer a:hover {
+    color: #9fb2ff;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 0;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-content p {
+        font-size: 1rem;
+    }
+    
+    .feature-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Animation Styles */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Three.js Canvas Container */
+.visualization-container {
+    width: 100%;
+    height: 400px; /* Increased height for better visibility */
+    min-height: 300px;
+    max-width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 2rem;
+    background: transparent; /* Remove background color for galaxy effect */
+    position: relative;
+}
+
+/* Glassmorphism effect for cards */
+.card, .feature-card {
+    background: rgba(255,255,255,0.05);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Soft glows for buttons and icons */
+.btn-primary, .feature-card .fa-book, .feature-card .fa-chart-line, .feature-card .fa-cube {
+    filter: drop-shadow(0 0 8px #6C5DD3);
+}
+
+/* Subtle animations */
+.card, .feature-card, .btn, .navbar {
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}Journal - Rewire{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card feature-card shadow mb-4" style="backdrop-filter: blur(12px);">
+            <div class="card-header" style="background: rgba(108,93,211,0.7); color: #E5E5F7; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 0 20px #6C5DD3;">
+                <h2 class="h4 mb-0">New Journal Entry</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.content.id_for_label }}" class="form-label">Content</label>
+                        {{ form.content }}
+                        {% if form.content.errors %}
+                            <div class="text-danger small mt-1">{{ form.content.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Save Entry</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card feature-card shadow" style="backdrop-filter: blur(12px);">
+            <div class="card-header" style="background: rgba(108,93,211,0.7); color: #E5E5F7; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 0 20px #6C5DD3;">
+                <h2 class="h4 mb-0">Search Entries</h2>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="{% url 'journal' %}">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ query|default:'' }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card feature-card shadow" style="backdrop-filter: blur(12px);">
+            <div class="card-header" style="background: rgba(108,93,211,0.7); color: #E5E5F7; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 0 20px #6C5DD3;">
+                <h2 class="h4 mb-0">Your Journal Entries</h2>
+            </div>
+            <div class="card-body">
+                {% if entries %}
+                    {% if query %}
+                        <div class="alert alert-info">
+                            Showing results for: <strong>{{ query }}</strong>
+                            <a href="{% url 'journal' %}" class="float-end">Clear</a>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="list-group">
+                        {% for entry in entries %}
+                            <div class="list-group-item list-group-item-action" style="background: rgba(255,255,255,0.01); color: #A5A5B5; border: none; border-radius: 1rem; margin-bottom: 0.5rem; box-shadow: 0 0 10px #6C5DD322;">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1" style="color: #D8D8F0;">{{ entry.title }}</h5>
+                                    <small class="text-muted">{{ entry.date_created|date:"F j, Y" }}</small>
+                                </div>
+                                <p class="mb-1">{{ entry.content|truncatewords:30 }}</p>
+                                <div class="mt-2">
+                                    <a href="{% url 'journal_detail' entry.pk %}" class="btn btn-sm btn-outline-primary" style="border-color: #6C5DD3; color: #6C5DD3;">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a href="{% url 'journal_delete' entry.pk %}" class="btn btn-sm btn-outline-danger" style="border-color: #FF4C60; color: #FF4C60;">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        {% if query %}
+                            <p style="color: #A5A5B5;">No entries found matching "{{ query }}".</p>
+                            <a href="{% url 'journal' %}" class="btn btn-outline-primary" style="border-color: #6C5DD3; color: #6C5DD3;">Show All Entries</a>
+                        {% else %}
+                            <p style="color: #A5A5B5;">You haven't created any journal entries yet.</p>
+                            <p style="color: #A5A5B5;">Use the form on the left to create your first entry!</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control {
+        background: rgba(36, 34, 62, 0.85) !important;
+        color: #E5E5F7 !important;
+        border: 1.5px solid #6C5DD3 !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 0 8px #6C5DD344;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+        background: rgba(36, 34, 62, 1) !important;
+        color: #E5E5F7 !important;
+        border-color: #8571ec !important;
+        box-shadow: 0 0 12px #6C5DD3;
+    }
+    .form-label {
+        color: #B0B0CC !important;
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add form-control class to all form inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const formInputs = document.querySelectorAll('form input:not([type="search"]), form textarea');
+        formInputs.forEach(input => {
+            input.classList.add('form-control');
+        });
+    });
+</script>
+{% endblock %}

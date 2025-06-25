@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Rewire{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card feature-card shadow mb-4" style="backdrop-filter: blur(12px);">
+            <div class="card-header" style="background: rgba(108,93,211,0.7); color: #E5E5F7; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 0 20px #6C5DD3;">
+                <h2 class="h4 mb-0">Profile Information</h2>
+            </div>
+            <div class="card-body text-center">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="Profile Avatar" class="rounded-circle img-fluid mb-3" style="max-width: 150px; box-shadow: 0 0 20px #6C5DD3;">
+                {% else %}
+                    <div class="avatar-placeholder mb-3 mx-auto" style="background: rgba(108,93,211,0.08); border-radius: 50%; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user fa-5x" style="color: #6C5DD3;"></i>
+                    </div>
+                {% endif %}
+                <h3 class="h5 mb-2" style="color: #E5E5F7;">{{ user.username }}</h3>
+                <p class="text-muted" style="color: #A5A5B5 !important;">{{ user.email }}</p>
+                <p><small style="color: #B0B0CC;">Member since: {{ user.profile.date_joined|date:"F j, Y" }}</small></p>
+                <p><small style="color: #B0B0CC;">Journal Entries: {{ journal_count }}</small></p>
+            </div>
+        </div>
+        
+        <div class="card feature-card shadow" style="backdrop-filter: blur(12px);">
+            <div class="card-header" style="background: rgba(108,93,211,0.7); color: #E5E5F7; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 0 20px #6C5DD3;">
+                <h2 class="h4 mb-0">Recent Moods</h2>
+            </div>
+            <div class="card-body">
+                {% if recent_moods %}
+                    <ul class="list-group list-group-flush">
+                        {% for mood in recent_moods %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center" style="background: transparent; color: #A5A5B5; border: none;">
+                                <span>{{ mood.get_mood_type_display }}</span>
+                                <span class="text-muted small">{{ mood.date_created|date:"M d, Y" }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-center" style="color: #A5A5B5;">No mood entries yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card feature-card shadow" style="backdrop-filter: blur(12px);">
+            <div class="card-header" style="background: rgba(108,93,211,0.7); color: #E5E5F7; border-radius: 1.5rem 1.5rem 0 0; box-shadow: 0 0 20px #6C5DD3;">
+                <h2 class="h4 mb-0">Edit Profile</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ u_form.username.id_for_label }}" class="form-label">Username</label>
+                        {{ u_form.username }}
+                        {% if u_form.username.errors %}
+                            <div class="text-danger small mt-1">{{ u_form.username.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ u_form.email.id_for_label }}" class="form-label">Email</label>
+                        {{ u_form.email }}
+                        {% if u_form.email.errors %}
+                            <div class="text-danger small mt-1">{{ u_form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ p_form.bio.id_for_label }}" class="form-label">Bio</label>
+                        {{ p_form.bio }}
+                        {% if p_form.bio.errors %}
+                            <div class="text-danger small mt-1">{{ p_form.bio.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ p_form.avatar.id_for_label }}" class="form-label">Avatar</label>
+                        {{ p_form.avatar }}
+                        {% if p_form.avatar.errors %}
+                            <div class="text-danger small mt-1">{{ p_form.avatar.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-control {
+        background: rgba(36, 34, 62, 0.85) !important;
+        color: #E5E5F7 !important;
+        border: 1.5px solid #6C5DD3 !important;
+        border-radius: 0.75rem !important;
+        box-shadow: 0 0 8px #6C5DD344;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-control:focus {
+        background: rgba(36, 34, 62, 1) !important;
+        color: #E5E5F7 !important;
+        border-color: #8571ec !important;
+        box-shadow: 0 0 12px #6C5DD3;
+    }
+    .form-label {
+        color: #B0B0CC !important;
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add form-control class to all form inputs
+    document.addEventListener('DOMContentLoaded', function() {
+        const formInputs = document.querySelectorAll('form input:not([type="file"]), form textarea');
+        formInputs.forEach(input => {
+            input.classList.add('form-control');
+        });
+        
+        const fileInputs = document.querySelectorAll('form input[type="file"]');
+        fileInputs.forEach(input => {
+            input.classList.add('form-control');
+        });
+        
+        // Add rows to textarea
+        const textareas = document.querySelectorAll('form textarea');
+        textareas.forEach(textarea => {
+            textarea.setAttribute('rows', '4');
+        });
+    });
+</script>
+{% endblock %}

@@ -27,7 +27,8 @@ Deployed on PythonAnywhere: [https://akanaman.pythonanywhere.com](https://akanam
 
 ## Screenshots
 
-> _Add screenshots of the home, dashboard, journal, and mood tracker pages here._
+
+![Screenshot 2025-06-25 221355](https://github.com/user-attachments/assets/e0fe0ef2-9b63-4867-935d-868c9146cfbb)
 
 ---
 
